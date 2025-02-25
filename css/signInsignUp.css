@@ -1,12 +1,159 @@
-body {
-    font-family: Arial, sans-serif;
+@font-face {
+    font-family: "CustomFont";
+    /* Give it a name */
+    src: url("../assets/fonts/Atop.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    font-family: "CustomFont", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.formOut {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #6CCCD4;
     height: 100vh;
+    width: 100%;
     overflow: hidden;
 }
+
+
+.cloud{
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    position: fixed;
+    background-color: #6CCCD4;
+}
+
+.cloud img:nth-child(1){
+    position: absolute;
+    width: 35%;
+    animation: one 15s linear infinite;
+    transform: translate(20%,30%);
+}
+@keyframes one {
+    0% {
+        transform: translate(20%,30%);
+    }
+    50% {
+        transform: translate(160%,30%);
+    }
+    100% {
+        transform: translate(20%,30%);
+    }
+}
+.cloud img:nth-child(2){
+    position: absolute;
+    width: 20%;
+    transform: translate(360%,160%);
+    animation: two 15s linear infinite;
+}
+@keyframes two {
+    0% {
+        transform: translate(360%,160%);
+    }
+    50% {
+        transform: translate(30%,160%);
+    }
+    100% {
+        transform: translate(360%,160%);
+    }
+}
+
+.cloud img:nth-child(3){
+    position: absolute;
+    width: 40%;
+    transform: translate(55%,160%);
+    animation: three 15s linear infinite;
+}
+@keyframes three {
+    0% {
+        transform: translate(55%,160%);
+    }
+    25% {
+        transform: translate(30%,160%);
+    }
+    75% {
+        transform: translate(160%,160%);
+    }
+    100% {
+        transform: translate(55%,160%);
+    }
+}
+
+
+
+
+
+.monkey{
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    height: 100vh;
+   pointer-events: none;
+}
+
+#error{
+    opacity: 0;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.mIn{
+    top: 75%;
+    left: -15%;
+    transition: 1s;
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+
+    animation: m 3s infinite;
+    animation-play-state: paused;
+}
+
+@keyframes m {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(20px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+
+.monkey img{
+    width: 10%;
+    transition: .5s;
+    transform: rotateZ(-30deg);
+}
+
+.monkey p{
+    padding: 10px 30px;
+    background-color: white;
+    color: #f84040;
+    width: fit-content;
+    border-radius: 15px;
+    position: absolute;
+    top: -50px;
+    left: 40px;
+}
+
+
+
+
+
+
+
+
 
 .container {
     text-align: center;
@@ -17,33 +164,61 @@ body {
 
 .container #board {
     width: 100%;
+    animation: board .8s ease-in;
 }
+
+@keyframes board {
+    from {
+        transform: translateY(120%);
+    }
+}
+
+
+
 .container #sign {
-    width:40%;
+    width: 40%;
     position: absolute;
     top: 30px;
     z-index: 2;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: .5s;
+    transition: 1s;
+    animation: sign 1.2s ease-in;
 }
+
+@keyframes sign {
+    from {
+        top: -50%;
+    }
+}
+
+
 .container #reg {
-    width:40%;
+    width: 40%;
     z-index: 2;
     position: absolute;
     top: -50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: .5s;
+    transition: 1s;
 }
+
 .container #leaf {
-    width:70%;
+    width: 70%;
     z-index: 1;
     position: absolute;
     top: 30px;
     left: 50%;
     transform: translate(-50%, -50%);
+    animation: leaf .8s ease-in;
 }
+
+@keyframes leaf {
+    from {
+        top: -50%;
+    }
+}
+
 
 .form-box {
     position: absolute;
@@ -52,8 +227,19 @@ body {
     transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
-width: 60%;
+    width: 60%;
+    animation: form 1s ease-in;
+    
 }
+@keyframes form {
+    from {
+        opacity: 0;
+    }
+}
+.forms{
+    display: none;
+}
+
 
 .hidden {
     display: none;
@@ -62,7 +248,7 @@ width: 60%;
 input {
     margin: 5px 0;
     padding: 10px 0px;
-    border: 0px ;
+    border: 0px;
     border-radius: 50px;
     width: 100%;
     text-align: center;
@@ -87,7 +273,8 @@ input {
     background-color: white;
     color: black;
     padding: 10px;
-    border: 0px ;
+    margin-top: 10px;
+    border: 0px;
     border-radius: 50px;
     cursor: pointer;
     display: flex;
@@ -96,11 +283,11 @@ input {
     gap: 10px;
 }
 
-.google-btn::before {
-    content: '\f1a0';
-    font-family: 'FontAwesome';
+.google-btn img {
+    width: 15px;
 }
 
-p {
+.form-box  p {
     font-size: 14px;
+    margin-top: 10px;
 }
