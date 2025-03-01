@@ -1,6 +1,15 @@
+@font-face {
+    font-family: "CustomFont";
+    /* Give it a name */
+    src: url("../assets/fonts/Atop.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
 * {
-    padding: 0;
+    font-family: "CustomFont", Arial, sans-serif;
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -221,4 +230,203 @@ body {
         opacity: 0;
         right: -60px;
     }
+}
+
+
+
+
+
+
+/*--------------------------------------- tabs universal -----------------------------------------------*/
+.tabs {
+    display: none;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.41);
+    z-index: 1999;
+    width: 100vw;
+    height: 100vh;
+    top: 0px;
+
+}
+
+.tab {
+    height: fit-content;
+    width: 60%;
+    height: fit-content;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    position: relative;
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.tab.active {
+    display: flex;
+}
+
+.tab #board {
+    width: 100%;
+}
+
+.close {
+    position: absolute;
+    right: 40px;
+    top: 40px;
+    width: 50px;
+    cursor: pointer;
+    transform: rotateZ(45deg);
+}
+
+
+
+/*--------------------------------------- settings -----------------------------------------------*/
+
+.tabIn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: #424242;
+    font-size: 2.5vw;
+
+}
+
+.tabIn h2 {
+    width: 50%;
+}
+
+.tabIn img {
+    width: 70%;
+    margin-left: 20px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.tabIn div {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+
+    margin: 20px;
+}
+
+
+
+/*--------------------------------------- how to play -----------------------------------------------*/
+
+.para {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: #424242;
+    height: 45vh;
+    width: 60%;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.para::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.para::-webkit-scrollbar-track {
+    background: #ffd0ad;
+    border-radius: 15px;
+}
+
+/* Handle */
+.para::-webkit-scrollbar-thumb {
+    background: #AA6028;
+    border-radius: 15px;
+}
+
+/*--------------------------------------- high score -----------------------------------------------*/
+
+.table {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: #424242;
+    height: 45vh;
+    width: 60%;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+table {
+    width: 100%;
+}
+
+table td {
+    text-align: center;
+    width: 50%;
+    color: #AA6028;
+}
+
+.table::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.table::-webkit-scrollbar-track {
+    background: #ffd0ad;
+    border-radius: 15px;
+}
+
+/* Handle */
+.table::-webkit-scrollbar-thumb {
+    background: #AA6028;
+    border-radius: 15px;
+}
+
+
+
+/*--------------------------------------- log Out -----------------------------------------------*/
+
+.logoutIn {
+    width: 70%;
+}
+
+.logoutIn div:nth-child(2) {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+
+    justify-content: center;
+    margin: 20px;
+}
+
+.logoutIn div:nth-child(1) {
+
+    display: flex;
+    justify-content: center;
+}
+
+.logoutIn h2 {
+    width: 100%;
+    text-align: center;
+}
+
+.logoutIn img {
+    width: 60px;
+    margin-top: 0px;
+}
+
+.logoutIn #no{
+    transform: rotateZ(45deg);
+}
+
+.logoutTab #board {
+    width: 80%;
 }

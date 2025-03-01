@@ -1,3 +1,14 @@
+<?php
+
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ./signInSignUp.php");
+    exit();
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,6 +18,7 @@
     <title>Menu</title>
     <link rel="stylesheet" href="../css/menu.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 </head>
 
 <body>
@@ -36,7 +48,7 @@
     </div>
 
     <div class="cornerButtons">
-        <svg id="htp" viewBox="0 0 214 215">
+        <svg class="hoverSound" onclick="openTab('howtoplayTab')" id="htp" viewBox="0 0 214 215">
             <defs>
                 <style>
                     .cls-1 {
@@ -151,10 +163,10 @@
             </g>
         </svg>
 
-        <img src="../assets/icons/logout.svg" id="logOut" alt="">
+        <img class="hoverSound" onclick="openTab('logoutTab')" src="../assets/icons/logout.svg" id="logOut" alt="">
 
 
-        <svg id="settings" viewBox="0 0 214 215">
+        <svg class="hoverSound" onclick="openTab('settingsTab')" id="settings" viewBox="0 0 214 215">
             <defs>
                 <style>
                     .cls-1 {
@@ -267,7 +279,7 @@
             </g>
         </svg>
 
-        <svg id="highScore" viewBox="0 0 214 215">
+        <svg class="hoverSound" onclick="openTab('highscoreTab')" id="highScore" viewBox="0 0 214 215">
             <defs>
                 <style>
                     .cls-1 {
@@ -384,7 +396,7 @@
 
     <div class="middle">
         <img src="../assets/texts/ladder.png" alt="">
-        <div class="mOption">
+        <div class="mOption hoverSound">
             <svg viewBox="0 0 214 215">
                 <defs>
                     <style>
@@ -501,17 +513,166 @@
     </div>
 
 
-    <div class="settings">
-        
+    <div class="tabs">
+        <div class="settingsTab tab " id="settingsTab">
+            <img class="close" onclick="closeTab()" src="../assets/png/close.png" alt="">
+            <img id="board" src="../assets/svg/htpBoard.svg" alt="">
+            <div class="tabIn">
+                <div class="div">
+                    <h2>Music</h2>
+                    <img id="MusicOff" src="../assets/png/off.png" alt="">
+                </div>
+                <div class="div">
+                    <h2>Sound</h2>
+                    <img id="SoundOff" src="../assets/png/off.png" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="highscoreTab tab " id="highscoreTab">
+            <img class="close" onclick="closeTab()" src="../assets/png/close.png" alt="">
+            <img id="board" src="../assets/svg/htpBoard.svg" alt="">
+            <div class="table">
+                <table>
+                    <tr>
+                        <th>Username</th>
+                        <th>Score</th>
+                    </tr>
+
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>CC</td>
+                        <td>1500</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+        <div class="howtoplayTab tab " id="howtoplayTab">
+            <img class="close" onclick="closeTab()" src="../assets/png/close.png" alt="">
+            <img id="board" src="../assets/svg/htpBoard.svg" alt="">
+            <div class="para">
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae numquam a necessitatibus culpa
+                    aperiam sed tempora. Deleniti voluptates itaque, sunt fuga necessitatibus, obcaecati numquam iusto,
+                    officia culpa delectus aperiam. Soluta.</p> <br>
+
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae numquam a necessitatibus culpa
+                    aperiam sed tempora. Deleniti voluptates itaque, sunt fuga necessitatibus, obcaecati numquam iusto,
+                    officia culpa delectus aperiam. Soluta.</p> <br>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae numquam a necessitatibus culpa
+                    aperiam sed tempora. Deleniti voluptates itaque, sunt fuga necessitatibus, obcaecati numquam iusto,
+                    officia culpa delectus aperiam. Soluta.</p>
+            </div>
+        </div>
+        <div class="logoutTab tab " id="logoutTab">
+            <img id="board" src="../assets/svg/htpBoard.svg" alt="">
+            <div class="logoutIn tabIn">
+                <div class="div">
+                    <h2>Are you sure?</h2>
+                </div>
+                <div class="div">
+                    <img id="no" onclick="closeTab()" src="../assets/png/close.png" alt="">
+                    <img id="ok" src="../assets/png/ok.png" alt="">
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="highscore"></div>
-    <div class="howtoplay"></div>
-    <div class="logout"></div>
+
+
+
+    <script src="../js/menu.js"></script>
+
+
+    <!-- //sign out------------------------------------------------------------------------------>
+
+    <script type="module">
+        import { auth } from "../js/firebase_config.js"; // Import auth
+        import { signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+        document.getElementById("ok").addEventListener("click", async function () {
+            try {
+                // Sign out from Firebase
+                await signOut(auth);
+
+                // Call logout.php to destroy session
+                await fetch("../server/logout.php", { method: "POST" });
+
+                // Redirect to sign-in page
+                window.location.href = "./signInSignUp.php";
+            } catch (error) {
+                console.error("Sign-Out Error:", error);
+            }
+        });
+    </script>
 
 
     <script>
-
-
 
         $(document).ready(function () {
 
@@ -526,12 +687,49 @@
             }, 500);
 
 
+            // music on off---------------------------------------------------------------------
+            var music = $("#Music")[0];        // Background Music
+            var hoverSound = $("#hoverSound")[0]; // Hover Sound
+            var isMusicPlaying = false;         // Music state
+            var isSoundEnabled = false;         // Sound effect state (OFF at start)
 
-            var audio = $("#hoverSound")[0];
+            // Ensure both are OFF when page loads
+            music.muted = true;
+            hoverSound.muted = true;
 
-            $(".cornerButtons svg,.middle svg,#logOut").hover(function () {
-                audio.currentTime = 0; // Restart the sound if already playing
-                audio.play();
+            // Toggle Background Music
+            $("#MusicOff").click(function () {
+                var img = $(this);
+                var newSrc = img.attr("src") === "../assets/png/off.png" ? "../assets/png/on.png" : "../assets/png/off.png";
+                img.attr("src", newSrc);
+
+                if (isMusicPlaying) {
+                    music.pause();
+                    music.currentTime = 0;
+                    music.muted = true;
+                } else {
+                    music.muted = false;
+                    music.play();
+                }
+                isMusicPlaying = !isMusicPlaying;
+            });
+
+            // Toggle Sound Effects (Hover Sound)
+            $("#SoundOff").click(function () {
+                var img = $(this);
+                var newSrc = img.attr("src") === "../assets/png/off.png" ? "../assets/png/on.png" : "../assets/png/off.png";
+                img.attr("src", newSrc);
+
+                isSoundEnabled = !isSoundEnabled; // Toggle sound state
+                hoverSound.muted = !isSoundEnabled; // Mute/unmute hover sound
+            });
+
+            // Play hover sound when hovering over buttons (if enabled)
+            $(".hoverSound").hover(function () {
+                if (isSoundEnabled) {
+                    hoverSound.currentTime = 0; // Restart sound on each hover
+                    hoverSound.play();
+                }
             });
 
         });

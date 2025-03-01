@@ -44,7 +44,7 @@
                     <button class="btn" id="signBtn">SIGN IN</button>
                     <p>New to game? <a href="#" onclick="toggleForm();goUpSign()">REGISTER</a></p>
                     <p>OR</p>
-                    <button class="google-btn"><img src="../assets/icons/google.svg" alt="" >
+                    <button class="google-btn" id="googleSignInBtn"><img src="../assets/icons/google.svg" alt="">
                         Continue with
                         Google</button>
                 </div>
@@ -62,6 +62,8 @@
         </div>
 
     </div>
+
+
 
     <script>
 
@@ -201,11 +203,50 @@
                 $('.forms').css('display', 'flex')
             }, 1000);
 
-
         });
 
 
     </script>
+
+
+
+    <!-- //google sign in---------------------------------------------------------------------------------------->
+
+    <script type="module">
+        import { auth } from "../js/firebase_config.js"; // Import auth
+
+        import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+        document.getElementById("googleSignInBtn").addEventListener("click", async function () {
+            const provider = new GoogleAuthProvider();
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+
+                const response = await fetch("../server/google_auth.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({
+                        google_id: user.uid,
+                        name: user.displayName,
+                        email: user.email
+                    })
+                });
+
+                const text = await response.text();
+                if (text.trim() === "success") {
+                    window.location.href = "./menu.php";
+                } else {
+                    document.getElementById("error").innerText = "Login failed: " + text;
+                }
+            } catch (error) {
+                console.error("Google Sign-In Error:", error);
+            }
+        });
+    </script>
+
+
+
 </body>
 
 </html>
