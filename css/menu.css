@@ -1,0 +1,224 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+}
+
+
+
+
+.cloud {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    background-color: #6CCCD4;
+}
+
+.cloud img:nth-child(1) {
+    position: absolute;
+    width: 35%;
+    animation: one 15s linear infinite;
+    transform: translate(20%, 30%);
+}
+
+@keyframes one {
+    0% {
+        transform: translate(20%, 30%);
+    }
+
+    50% {
+        transform: translate(160%, 30%);
+    }
+
+    100% {
+        transform: translate(20%, 30%);
+    }
+}
+
+.cloud img:nth-child(2) {
+    position: absolute;
+    z-index: -1;
+    width: 20%;
+    transform: translate(360%, 160%);
+    animation: two 15s linear infinite;
+}
+
+@keyframes two {
+    0% {
+        transform: translate(360%, 160%);
+    }
+
+    50% {
+        transform: translate(30%, 160%);
+    }
+
+    100% {
+        transform: translate(360%, 160%);
+    }
+}
+
+.cloud img:nth-child(3) {
+    position: absolute;
+    width: 40%;
+    transform: translate(55%, 100%);
+    animation: three 15s linear infinite;
+}
+
+@keyframes three {
+    0% {
+        transform: translate(55%, 100%);
+    }
+
+    25% {
+        transform: translate(30%, 100%);
+    }
+
+    75% {
+        transform: translate(160%, 100%);
+    }
+
+    100% {
+        transform: translate(55%, 100%);
+    }
+}
+
+#jungle {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -55%);
+    z-index: -2;
+    width: 120%;
+    bottom: 0px;
+    animation: jungle .5s ease-in;
+}
+
+@keyframes jungle {
+    from {
+        transform: translate(-50%, -15%);
+    }
+}
+
+
+
+
+
+
+.middle {
+    width: 45%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: miggle .5s ease-in;
+    display: none;
+}
+
+@keyframes miggle {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+    }
+}
+
+
+.middle img {
+    width: 100%;
+}
+
+.mOption {
+    display: flex;
+    justify-content: center;
+}
+
+.mOption svg {
+    width: 60px;
+    cursor: pointer;
+}
+
+.mOption svg:hover {
+    transform: scale(0.9);
+}
+
+.cornerButtons {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.cornerButtons svg {
+    position: absolute;
+    width: 60px;
+    cursor: pointer;
+}
+
+.cornerButtons svg:hover {
+    transform: scale(0.9);
+}
+
+#htp {
+    left: 20px;
+    top: 20px;
+    animation: htp .5s ease-in;
+    display: none;
+}
+
+@keyframes htp {
+    from {
+        opacity: 0;
+        left: -60px;
+    }
+}
+
+#logOut {
+    left: 20px;
+    bottom: 20px;
+    position: absolute;
+    width: 60px;
+    cursor: pointer;
+    animation: lo .5s ease-in;
+    display: none;
+}
+
+@keyframes lo {
+    from {
+        opacity: 0;
+        left: -60px;
+    }
+}
+
+#logOut:hover {
+    transform: scale(0.9);
+}
+
+#settings {
+    top: 20px;
+    right: 20px;
+    animation: sett .5s ease-in;
+    display: none;
+}
+
+@keyframes sett {
+    from {
+        opacity: 0;
+        right: -60px;
+    }
+}
+
+#highScore {
+    bottom: 20px;
+    right: 20px;
+    animation: hs .5s ease-in;
+    display: none;
+}
+
+@keyframes hs {
+    from {
+        opacity: 0;
+        right: -60px;
+    }
+}

@@ -23,7 +23,7 @@
     <div class="monkey">
         <div class="mIn">
             <img src="../assets/monkey.png" alt="">
-            <p id="error">Cant be empty</p>
+            <p id="error"></p>
         </div>
     </div>
 
@@ -39,21 +39,22 @@
 
                 <div class="form-box signBox" id="signInForm">
 
-                    <input type="email" placeholder="E-MAIL" required>
-                    <input type="password" placeholder="PASSWORD" required>
+                    <input type="email" placeholder="E-MAIL" required id="lmail">
+                    <input type="password" placeholder="PASSWORD" required id="lpassword">
                     <button class="btn" id="signBtn">SIGN IN</button>
                     <p>New to game? <a href="#" onclick="toggleForm();goUpSign()">REGISTER</a></p>
                     <p>OR</p>
-                    <button class="google-btn"><img src="../assets/icons/google.svg" alt="" onclick="monkeyIn()"> Continue with
+                    <button class="google-btn"><img src="../assets/icons/google.svg" alt="" >
+                        Continue with
                         Google</button>
                 </div>
 
                 <div class="form-box hidden" id="signUpForm">
 
-                    <input type="text" placeholder="USERNAME" required>
-                    <input type="email" placeholder="E-MAIL" required>
-                    <input type="password" placeholder="PASSWORD" required>
-                    <input type="password" placeholder="CONFIRM PASSWORD" required>
+                    <input type="text" placeholder="USERNAME" required id="rusername">
+                    <input type="email" placeholder="E-MAIL" required id="rmail">
+                    <input type="password" placeholder="PASSWORD" required id="rpassword">
+                    <input type="password" placeholder="CONFIRM PASSWORD" required id="conpassword">
                     <button class="btn" id="regBtn">REGISTER</button>
                     <p>Already have an account? <a href="#" onclick="toggleForm();goUpReg()">SIGN IN</a></p>
                 </div>
@@ -66,39 +67,133 @@
 
 
         function monkeyIn() {
-           
-            $('.mIn').css('left','10%')
+
+            $('.mIn').css('left', '10%')
 
             setTimeout(() => {
-                $('.mIn img').css('transform','rotateZ(0deg)')
-                $('.mIn').css('animation-play-state','running')
+                $('.mIn img').css('transform', 'rotateZ(0deg)')
+                $('.mIn').css('animation-play-state', 'running')
             }, 500);
 
             setTimeout(() => {
-                $('#error').css('opacity','1')
+                $('#error').css('opacity', '1')
             }, 1100);
         }
 
-        function monkeyOut(){
-            $('.mIn img').css('transform','rotateZ(-30deg)')
-            $('.mIn').css('left','130%')
-            $('#error').css('opacity','0')
+        function monkeyOut() {
+            $('.mIn img').css('transform', 'rotateZ(-30deg)')
+            $('.mIn').css('left', '130%')
+            $('#error').css('opacity', '0')
 
             setTimeout(() => {
-                $('.mIn').css('display','none')
-                $('.mIn').css('left','-15%')
+                $('.mIn').css('display', 'none')
+                $('.mIn').css('left', '-15%')
 
                 setTimeout(() => {
-                    $('.mIn').css('display','flex')
+                    $('.mIn').css('display', 'flex')
                 }, 100);
             }, 600);
-        } 
+        }
 
 
+        function isValidEmail(email) {
+            let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
 
-        $('#signBtn').click(function () {
-           
-        })
+        // player Login
+        $("#signBtn").click(function () {
+            let email = $("#lmail").val().trim();
+            let password = $("#lpassword").val().trim();
+
+            $("#error").text()
+
+            if (!email || !password) {
+                monkeyIn()
+                $("#error").text("Please enter email and password.").css("color", "red");
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                monkeyIn()
+                $("#error").text("Invalid email format!").css("color", "red");
+                return;
+            }
+
+            $.ajax({
+                url: "../server/login.php",
+                type: "POST",
+                data: { email: email, password: password },
+                success: function (response) {
+                    if (response.trim() === "success") {
+                        monkeyOut()
+                        window.location.href = "../pages/menu.php"; // Redirect
+                    } else {
+                        monkeyIn()
+                        $("#error").text("Invalid credentials!").css("color", "red");
+                    }
+                },
+                error: function () {
+                    monkeyIn()
+                    $("#error").text("Error logging in. Please try again.").css("color", "red");
+                }
+            });
+        });
+
+        // player Registration
+        $("#regBtn").click(function () {
+
+            console.log('click')
+
+            let name = $("#rusername").val().trim();
+            let email = $("#rmail").val().trim();
+            let password = $("#rpassword").val().trim();
+            let confirmPassword = $("#conpassword").val().trim();
+
+            $("#error").text()
+
+            if (!name || !email || !password || !confirmPassword) {
+                monkeyIn()
+                $("#error").text("All fields are required!").css("color", "red");
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                monkeyIn()
+                $("#error").text("Invalid email format!").css("color", "red");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                monkeyIn()
+                $("#error").text("Passwords do not match!").css("color", "red");
+                return;
+            }
+
+            $.ajax({
+                url: "../server/register.php",
+                type: "POST",
+                data: { name: name, email: email, password: password },
+                success: function (response) {
+                    if (response.trim() === "success") {
+                        monkeyOut();
+                        toggleForm();
+                        goUpReg();
+                        $('#rusername, #rmail, #rpassword, #conpassword').val('');
+
+                    } else {
+                        monkeyIn()
+                        $("#error").text(response).css("color", "red");
+                    }
+                },
+                error: function () {
+                    monkeyIn()
+                    $("#error").text("Error registering. Please try again.").css("color", "red");
+                }
+            });
+        });
+
+
 
         $(document).ready(function () {
 
