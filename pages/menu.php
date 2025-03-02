@@ -23,7 +23,7 @@ if (!isset($_SESSION['user_id'])) {
 
 <body>
 
-    <audio id="Music" muted>
+    <audio id="Music" muted loop>
         <source src="../assets/music/song2.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
@@ -534,82 +534,41 @@ if (!isset($_SESSION['user_id'])) {
             <div class="table">
                 <table>
                     <tr>
+                        <th>Rank</th>
                         <th>Username</th>
                         <th>Score</th>
                     </tr>
 
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1200</td>
-                    </tr>
-                    <tr>
-                        <td>CC</td>
-                        <td>1500</td>
-                    </tr>
+                    <?php
+
+                    include('../server/DB_Connect.php');
+
+                    $sql = "SELECT * FROM `players` ORDER BY `score` DESC LIMIT 10;";
+
+                    $result = mysqli_query($conn, $sql);
+
+                    if (mysqli_num_rows($result) > 0) {
+
+                        $rank = 1;
+
+                        while ($row = mysqli_fetch_assoc($result)) {
+
+                            echo "
+                        <tr>
+                            <td>" . $rank . "</td>
+                            <td>" . $row['username'] . "</td>
+                            <td>" . $row['score'] . "</td>
+                        </tr>
+                        
+                        ";
+                            $rank++;
+                        }
+
+                    }
+
+
+                    ?>
+
 
                 </table>
             </div>

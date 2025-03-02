@@ -355,17 +355,20 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-
+    transform: translate(-60%, -50%);
+    padding-right: 30px;
     color: #424242;
     height: 45vh;
-    width: 60%;
+    width: 70%;
     overflow: hidden;
     overflow-y: scroll;
 }
 
 table {
     width: 100%;
+   
+}
+table th{
 }
 
 table td {

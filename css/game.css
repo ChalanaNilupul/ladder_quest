@@ -1,0 +1,224 @@
+@font-face {
+    font-family: "CustomFont";
+    /* Give it a name */
+    src: url("../assets/fonts/Atop.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    font-family: "CustomFont", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+    background-color: #6CCCD4;
+}
+
+#jungle {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -55%);
+    z-index: -2;
+    width: 120%;
+    bottom: 0px;
+    animation: jungle .5s ease-in;
+}
+
+@keyframes jungle {
+    from {
+        transform: translate(-50%, -15%);
+    }
+}
+
+
+.content {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.content .left,
+.right {
+    width: 50%;
+    height: 100%;
+}
+
+.left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    animation: left .8s ease-in;
+}
+
+@keyframes left {
+    from {
+        transform: translateX(-100%);
+    }
+}
+
+
+.left img {
+    width: 100%;
+}
+
+#gameBoard {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50.5%, -50%);
+    width: 100%;
+}
+
+#game {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-51%, -50%);
+    width: 80%;
+    border-radius: 20px;
+}
+
+
+
+.right {
+    animation: right .8s ease-in;
+}
+
+@keyframes right {
+    from {
+        transform: translateX(100%);
+    }
+}
+
+
+
+/* ----------------------------------------game board----------------------------------------------- */
+
+.playBoard {
+    width: 80%;
+    border-radius: 20px;
+    margin-right: 10px;
+    /* background-color: rgba(0, 255, 255, 0.37); */
+    z-index: 100;
+    height: 85%;
+
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+}
+
+#player1 {
+    width: 30px;
+    height: 30px;
+    background: rgb(0, 255, 64);
+    border-radius: 50%;
+    grid-column: 1;
+    grid-row: 10;
+    transition: all 0.5s ease-in-out;
+
+    place-self: center;
+}
+
+
+/* ----------------------------------------quiz----------------------------------------------- */
+
+.questionout {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 20px;
+}
+
+.question {
+    width: 80%;
+}
+
+.question img {
+    width: 100%;
+    border-radius: 15px;
+    border: 5px solid #AA6028;
+}
+
+.answersOut {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.answers {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+}
+
+.answers button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: aliceblue;
+    color: #AA6028;
+    cursor: pointer;
+    border: 0px;
+}
+
+.answers button:hover {
+    transform: scale(1.2);
+}
+
+.menuItemsOut{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.menuItems{
+    padding: 20px;
+    width:80%;
+    height: fit-content;
+    background: url(../assets/png/bg.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 20px;
+}
+
+.time{
+    display: flex;
+    align-items: center;
+}
+.time p{
+    margin-left: 20px;
+    color: aliceblue;
+    font-size: 20px;
+}
+.time img{
+    width: 40px;
+}
+
+.clock.active{
+    animation: clock 1s ease-in infinite;
+}
+
+@keyframes clock {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
