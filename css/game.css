@@ -90,6 +90,9 @@ body {
 
 .right {
     animation: right .8s ease-in;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @keyframes right {
@@ -115,16 +118,62 @@ body {
     grid-template-rows: repeat(10, 1fr);
 }
 
-#player1 {
-    width: 30px;
-    height: 30px;
-    background: rgb(0, 255, 64);
+#player1,#player2 {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     grid-column: 1;
     grid-row: 10;
     transition: all 0.5s ease-in-out;
 
     place-self: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#player1{
+    /* background: rgb(0, 255, 64); */
+
+}
+
+#player1 img{
+    width: 100%;
+    animation: p1 1s infinite;
+}
+
+@keyframes p1 {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+
+#player2 {
+    /* background-color: red; */
+}
+
+#player2 img{
+    width: 70%;
+    animation: p2 1s infinite;
+}
+
+@keyframes p2 {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
 }
 
 
@@ -178,15 +227,22 @@ body {
     transform: scale(1.2);
 }
 
-.menuItemsOut{
+.ansBtn.disable{
+    opacity: 0.5;
+}
+.ansBtn.disable:hover{
+    transform: scale(1);
+}
+
+.menuItemsOut {
     display: flex;
     justify-content: center;
     width: 100%;
 }
 
-.menuItems{
+.menuItems {
     padding: 20px;
-    width:80%;
+    width: 80%;
     height: fit-content;
     background: url(../assets/png/bg.png);
     background-repeat: no-repeat;
@@ -194,20 +250,22 @@ body {
     border-radius: 20px;
 }
 
-.time{
+.time {
     display: flex;
     align-items: center;
 }
-.time p{
+
+.time p {
     margin-left: 20px;
     color: aliceblue;
     font-size: 20px;
 }
-.time img{
+
+.time img {
     width: 40px;
 }
 
-.clock.active{
+.clock.active {
     animation: clock 1s ease-in infinite;
 }
 
@@ -215,10 +273,185 @@ body {
     0% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.2);
     }
+
     100% {
         transform: scale(1);
+    }
+}
+
+
+
+
+
+/*--------------------------------------- tabs universal -----------------------------------------------*/
+.tabs {
+    display: none;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.41);
+    z-index: 1999;
+    width: 100vw;
+    height: 100vh;
+    top: 0px;
+
+}
+
+.tab {
+    height: fit-content;
+    width: 60%;
+    height: fit-content;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    position: relative;
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.tab.active {
+    display: flex;
+}
+
+.tab #board {
+    width: 100%;
+}
+
+.tabIn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: #424242;
+    font-size: 2.5vw;
+
+}
+
+.close {
+    position: absolute;
+    right: 40px;
+    top: 40px;
+    width: 50px;
+    cursor: pointer;
+    transform: rotateZ(45deg);
+}
+
+
+
+/*--------------------------------------- go back -----------------------------------------------*/
+
+.goBackIn {
+    width: 70%;
+}
+
+.goBackIn div:nth-child(2) {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+
+    justify-content: center;
+    margin: 20px;
+}
+
+.goBackIn div:nth-child(1) {
+
+    display: flex;
+    justify-content: center;
+}
+
+.goBackIn h2 {
+    width: 100%;
+    text-align: center;
+}
+
+.goBackIn img {
+    width: 60px;
+    margin-top: 0px;
+}
+
+.goBackIn #no {
+    transform: rotateZ(45deg);
+}
+
+.goBack #board {
+    width: 80%;
+}
+
+.menuItems button {
+    padding: 10px 20px;
+    float: right;
+    border: 0px;
+    border-radius: 25px;
+    cursor: pointer;
+    color: #424242;
+    transition: .5s;
+}
+
+.menuItems button:hover {
+    color: #AA6028;
+    transform: scale(1.1);
+}
+
+.playersout {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.players {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    color: #AA6028;
+}
+.players div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.players img{
+    width: 40px;
+    margin-right: 10px;
+}
+
+/* --------------------------------------------waiting for player---------------------------------------------------- */
+
+.waiting h2{
+    font-size: 30px;
+}
+
+.waiting #board{
+    width: 70%;
+}
+
+.waiting .monkeyloading{
+    transform: rotate(-0deg);
+    animation: m 1s ease-in-out infinite;
+}
+
+@keyframes m {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(20px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+
+
+@media screen and (min-width: 1600px) {
+    .playBoard {
+        height: 77%;
     }
 }

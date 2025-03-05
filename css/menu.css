@@ -433,3 +433,43 @@ table td {
 .logoutTab #board {
     width: 80%;
 }
+
+
+
+/*--------------------------------------- Start Game -----------------------------------------------*/
+
+.startGame .tabIn button{
+    padding: 10px 20px;
+    border: 0px;
+    border-radius: 25px;
+    background-color: #AA6028;
+    cursor: pointer;
+    color: white;
+    transition: .5s;
+}
+.startGame .tabIn button:hover{
+    background-color: #e7c500;
+}
+.startGame #board{
+    width: 70%;
+}
+
+.startGame .close {
+    position: absolute;
+    right: 18%;
+    top: 5%;
+    width: 50px;
+    cursor: pointer;
+    transform: rotateZ(45deg);
+}
+.startGame .tabIn div{
+    display: flex;
+    justify-content: center;
+}
+
+.startGame .tabIn input{
+    border-radius: 25px;
+    outline: none;
+    padding: 10px;
+    border: 0px;
+}

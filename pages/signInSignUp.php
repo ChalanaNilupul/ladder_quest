@@ -126,20 +126,24 @@
                 url: "../server/login.php",
                 type: "POST",
                 data: { email: email, password: password },
+                dataType: "json",  // Ensure this is set to JSON
                 success: function (response) {
-                    if (response.trim() === "success") {
-                        monkeyOut()
-                        window.location.href = "../pages/menu.php"; // Redirect
+                    console.log("Response object:", response);
+                    if (response.success) {
+                        monkeyOut();
+                        localStorage.setItem("playerId", response.player_id);
+                        window.location.href = "./menu.php"; // Redirect
                     } else {
-                        monkeyIn()
-                        $("#error").text("Invalid credentials!").css("color", "red");
+                        monkeyIn();
+                        $("#error").text(response.message).css("color", "red");
                     }
                 },
                 error: function () {
-                    monkeyIn()
+                    monkeyIn();
                     $("#error").text("Error logging in. Please try again.").css("color", "red");
                 }
             });
+
         });
 
         // player Registration
@@ -233,16 +237,21 @@
                     })
                 });
 
-                const text = await response.text();
-                if (text.trim() === "success") {
+                // Parse the JSON response
+                const responseData = await response.json();
+
+                // Check the success of the response
+                if (responseData.success) {
+                    localStorage.setItem("playerId", responseData.player_id);
                     window.location.href = "./menu.php";
                 } else {
-                    document.getElementById("error").innerText = "Login failed: " + text;
+                    document.getElementById("error").innerText = "Login failed: " + responseData.message;
                 }
             } catch (error) {
                 console.error("Google Sign-In Error:", error);
             }
         });
+
     </script>
 
 

@@ -1,34 +1,28 @@
 <?php
 
-include('./dbConnect.php');
+include "./DB_Connect.php";
 
-$userName = trim($_POST['userName']);
+$userId = trim($_POST['userId']);
 $score = $_POST['score'];
 
-$sql = "SELECT `highScore` FROM `players` WHERE `userName`='" . $userName . "'";
+$sql = "SELECT `score` FROM `players` WHERE `id`='" . $userId . "'";
 
-$result = mysqli_query($con, $sql);
+$result = mysqli_query($conn, $sql);
 
 $row = mysqli_fetch_assoc($result);
-$currScore = $row['highScore'];
+$currScore = $row['score'];
 
-if($currScore < $score){
-    $sql1 = "UPDATE `users`
-    SET `highScore` = '$score'
-    WHERE `userName`='".$userName."'";
 
-    if(mysqli_query($con, $sql1)){
+$sql1 = "UPDATE `players`
+    SET `score` = '$score'
+    WHERE `id`='" . $userId . "'";
 
-        echo "Success";
-    }
-    else{
-        echo "Error";
-    }
+if (mysqli_query($conn, $sql1)) {
+
+    echo "Success";
+} else {
+    echo "Error";
 }
-else {
-    echo "Lower";
-}
-
 
 
 ?>
