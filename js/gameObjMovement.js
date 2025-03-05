@@ -1,78 +1,134 @@
 const boardConfig = {
-    20: 59,  // Ladder
-    2: 23,   // Ladder
-    6: 45, // Ladder
-    57: 96, // Ladder
-    52: 72, // Ladder
-    71: 92, // Ladder
-
-    98: 40,  // Snake
-    84: 58,  // Snake
-    87: 49,  // Snake
-    50: 5,   // Snake
-    56: 8,   // Snake
-    43: 17,  // Snake
-    73: 15,  // Snake
+    20: 59, 2: 23, 6: 45, 57: 96, 52: 72, 71: 92, // Ladders
+    98: 40, 84: 58, 87: 49, 50: 5, 56: 8, 43: 17, 73: 15 // Snakes
 };
 
+let player1Position = 1; // Start position for Player 1
+let player2Position = 1; // Start position for Player 2
+const totalCells = 100; 
 
-let playerPosition = 1; // Start at position 1
-const totalCells = 100; // Adjust according to your board size
+let isMoving = false; // Flag to prevent conflicts
 
-function movePlayer(steps) {
+function movePlayer(steps, answer, PlayerTurn) {
+    isMoving = true;  // Stop fetching positions
     steps = Number(steps);
-    console.log(`Rolled: ${steps}`);
 
-    let targetPosition = playerPosition + steps;
-
-    // Ensure player doesn't go beyond the last cell (100)
-    if (targetPosition > totalCells) {
-        console.log("You need an exact roll to win!");
-        return;
+    let targetPosition;
+    if (answer) {
+        targetPosition = PlayerTurn == localStorage.getItem("player1") ? player1Position + steps : player2Position + steps;
+    } else {
+        // When answer is false, just move back one cell
+        targetPosition = PlayerTurn == localStorage.getItem("player1") ? player1Position - 1 : player2Position - 1;
+        if (targetPosition < 1) targetPosition = 1; // Ensure doesn't go below 1
     }
-
-    console.log(`Moving from ${playerPosition} to ${targetPosition}`);
 
     function animateStep() {
-        if (playerPosition === targetPosition) {
-            // Check for snakes or ladders after stopping
-            if (boardConfig[playerPosition]) {
-                let newPos = boardConfig[playerPosition];
-                //console.log(`You hit a ${playerPosition < newPos ? "Ladder 🎉" : "Snake 🐍"}! Moving to ${newPos}`);
-                playerPosition = newPos;
-                updatePlayerPosition(); 
+        if (PlayerTurn == localStorage.getItem("player1")) {
+            if (answer) {
+                if (player1Position == targetPosition) {
+                    checkSnakesOrLadders(PlayerTurn);
+                    isMoving = false;  // Resume fetching after move
+                    return;
+                }
+                player1Position++;
+            } else {
+                if (player1Position == targetPosition) {
+                    isMoving = false;  // Resume fetching after move
+                    return;
+                }
+                player1Position--;
             }
-            return;
+        } else {
+            if (answer) {
+                if (player2Position == targetPosition) {
+                    checkSnakesOrLadders(PlayerTurn);
+                    isMoving = false;  // Resume fetching after move
+                    return;
+                }
+                player2Position++;
+            } else {
+                if (player2Position == targetPosition) {
+                    isMoving = false;  // Resume fetching after move
+                    return;
+                }
+                player2Position--;
+            }
         }
 
-        playerPosition++; 
-        updatePlayerPosition(); 
-
-        setTimeout(animateStep, 300); 
+        updatePlayerPosition(PlayerTurn);
+        setTimeout(animateStep, 300);
     }
 
-    animateStep(); 
+    animateStep();
 }
 
 
-function updatePlayerPosition() {
-    let row = Math.floor((playerPosition - 1) / 10) + 1; // Calculate row
-    let col = (playerPosition - 1) % 10 + 1; // Calculate column
+function checkSnakesOrLadders(PlayerTurn) {
+    let playerPosition = PlayerTurn == localStorage.getItem("player1") ? player1Position : player2Position;
 
-    if (row % 2 == 0 ) {
-        //(playerPosition - 1) % 10 + 1;
-        col = (10 - ((playerPosition - 1) % 10 + 1)) + 1
-        console.log(row)
+    if (boardConfig[playerPosition]) {
+        let newPos = boardConfig[playerPosition];
+
+       // console.log(`You hit a ${playerPosition < newPos ? "Ladder 🎉" : "Snake 🐍"}! Moving to ${newPos}`);
+
+        if (PlayerTurn == localStorage.getItem("player1")) {
+            player1Position = newPos;
+        } else {
+            player2Position = newPos;
+        }
+
+        updatePlayerPosition(PlayerTurn);
+
+        // **Recursive Call to Check Again** (in case of another ladder)
+        checkSnakesOrLadders(PlayerTurn);
     }
-    else if(row % 2 == 1) {
-        
-        row = row
-        console.log(row)
+}
+
+
+function updatePlayerPosition(PlayerTurn) {
+    let playerPosition = PlayerTurn == localStorage.getItem("player1") ? player1Position : player2Position;
+    let row = Math.floor((playerPosition - 1) / 10) + 1;
+    let col = (playerPosition - 1) % 10 + 1;
+
+    if (row % 2 === 0) {
+        col = (10 - ((playerPosition - 1) % 10 + 1)) + 1;
     }
 
-    $("#player1").css({
-        "grid-row": 11 - row,  // Reverse because grid starts from top
+    let playerElement = PlayerTurn == localStorage.getItem("player1") ? "#player1" : "#player2";
+
+    console.log('player',playerElement)
+    console.log('PlayerTurn',PlayerTurn)
+    console.log('localStorage.getItem("player1")',localStorage.getItem("player1"))
+
+    $(playerElement).css({
+        "grid-row": 11 - row,
         "grid-column": col
     });
+
+    
+
+    // Send updated position to the server
+    updatePlayerPositionInDB(PlayerTurn, playerPosition);
 }
 
+function updatePlayerPositionInDB(PlayerTurn, newPosition) {
+    let gameId = localStorage.getItem("gameId");
+    let playerKey = PlayerTurn == localStorage.getItem("player1") ? "player1_pos" : "player2_pos";
+
+    // console.log('key',playerKey)
+    // console.log('PlayerTurn',PlayerTurn)
+    // console.log('player 1',localStorage.getItem("player1"))
+    // console.log(PlayerTurn == localStorage.getItem("player1"))
+
+    $.ajax({
+        url: "../server/update_position.php",
+        method: "POST",
+        data: { gameId: gameId, playerKey: playerKey, position: newPosition },
+        success: function (response) {
+            console.log("Position updated:", response);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error updating position:", xhr.responseText);
+        }
+    });
+}

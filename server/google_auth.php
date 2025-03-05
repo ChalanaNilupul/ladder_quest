@@ -7,8 +7,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
 
+    // Validate the input data
     if (empty($google_id) || empty($email)) {
-        echo "Google authentication failed!";
+        echo json_encode(["success" => false, "message" => "Google authentication failed!"]);
         exit;
     }
 
@@ -23,21 +24,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_result($id);
         $stmt->fetch();
         $_SESSION['user_id'] = $id;
-        echo "success";
+        echo json_encode(["success" => true, "player_id" => $_SESSION['user_id']]);
     } else {
         // New Google user, create account with score = 0
         $insertQuery = "INSERT INTO players (google_id, username, email, score) VALUES (?, ?, ?, ?)";
         $insertStmt = $conn->prepare($insertQuery);
-        $score = 0; // Define score
+        $score = 0; // Default score for new user
         $insertStmt->bind_param("sssi", $google_id, $name, $email, $score);
 
         if ($insertStmt->execute()) {
             $_SESSION['user_id'] = $conn->insert_id;
-            echo "success";
+            echo json_encode(["success" => true, "player_id" => $_SESSION['user_id']]);
         } else {
-            echo "Database error: " . $conn->error;
+            // If there is an error with the database insertion
+            echo json_encode(["success" => false, "message" => "Database error: " . $conn->error]);
         }
     }
+
     $stmt->close();
     $conn->close();
 }

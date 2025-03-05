@@ -397,7 +397,7 @@ if (!isset($_SESSION['user_id'])) {
     <div class="middle">
         <img src="../assets/texts/ladder.png" alt="">
         <div class="mOption hoverSound">
-            <svg viewBox="0 0 214 215">
+            <svg onclick="openTab('startGame')" viewBox="0 0 214 215">
                 <defs>
                     <style>
                         .cls-1 {
@@ -601,6 +601,21 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
             </div>
         </div>
+        <div class="startGame tab " id="startGame">
+            <img class="close" onclick="closeTab()" src="../assets/png/close.png" alt="">
+            <img id="board" src="../assets/svg/htpBoard.svg" alt="">
+            <div class="tabIn">
+                <div class="div">
+                    <button id="createGameBtn">Create Room</button>
+                </div>
+                <div class="div">
+                   
+                        <input type="text" id="gameId" placeholder="Enter Game ID to join" required>
+                        <button id="joinGameBtn">Join Game</button>
+                    
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -646,15 +661,84 @@ if (!isset($_SESSION['user_id'])) {
             }, 500);
 
 
-            // music on off---------------------------------------------------------------------
+            //starting the game-------------------------------------------------------------
+            // When Player 1 starts the game
+            // Player 1 creates a game room
+            $("#createGameBtn").click(function () {
+                $.ajax({
+                    url: "../server/start_game.php",
+                    method: "POST",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Game created! Your room ID is: " + response.gameId);
+                            localStorage.setItem("gameId", response.gameId);
+                            window.location.href = "game.php"; 
+                            console.log(response.gameId)
+                        } else {
+                            alert(response.error);
+                        }
+                    }
+                });
+            });
+
+
+
+            $("#joinGameBtn").click(function () {
+                let gameId = $("#gameId").val().trim();
+
+                $.ajax({
+                    url: "../server/join_game.php",
+                    method: "POST",
+                    data: { gameId: gameId },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.success) {
+                            localStorage.setItem("gameId", response.gameId);
+                            window.location.href = "game.php"; 
+                            console.log(response)
+                        } else {
+                            alert(response.error);
+                        }
+                    }
+                });
+            });
+
+
+
+
+
+
+
+
+
+
             var music = $("#Music")[0];        // Background Music
             var hoverSound = $("#hoverSound")[0]; // Hover Sound
-            var isMusicPlaying = false;         // Music state
-            var isSoundEnabled = false;         // Sound effect state (OFF at start)
 
-            // Ensure both are OFF when page loads
-            music.muted = true;
-            hoverSound.muted = true;
+            // Load saved states from localStorage
+            var isMusicPlaying = localStorage.getItem("isMusicPlaying") === "true";
+            var isSoundEnabled = localStorage.getItem("isSoundEnabled") === "true";
+
+            // Set initial music state
+            if (isMusicPlaying) {
+                $("#MusicOff").attr("src", "../assets/png/on.png");
+                music.muted = false;
+                music.play();
+            } else {
+                $("#MusicOff").attr("src", "../assets/png/off.png");
+                music.muted = true;
+                music.pause();
+            }
+
+            // Set initial sound effect state
+            if (isSoundEnabled) {
+                $("#SoundOff").attr("src", "../assets/png/on.png");
+                hoverSound.muted = false;
+            } else {
+                $("#SoundOff").attr("src", "../assets/png/off.png");
+                hoverSound.muted = true;
+            }
 
             // Toggle Background Music
             $("#MusicOff").click(function () {
@@ -662,15 +746,18 @@ if (!isset($_SESSION['user_id'])) {
                 var newSrc = img.attr("src") === "../assets/png/off.png" ? "../assets/png/on.png" : "../assets/png/off.png";
                 img.attr("src", newSrc);
 
+                isMusicPlaying = !isMusicPlaying;
+
                 if (isMusicPlaying) {
-                    music.pause();
-                    music.currentTime = 0;
-                    music.muted = true;
-                } else {
                     music.muted = false;
                     music.play();
+                } else {
+                    music.pause();
+                    music.muted = true;
                 }
-                isMusicPlaying = !isMusicPlaying;
+
+                // Save music state to local storage
+                localStorage.setItem("isMusicPlaying", isMusicPlaying);
             });
 
             // Toggle Sound Effects (Hover Sound)
@@ -679,17 +766,21 @@ if (!isset($_SESSION['user_id'])) {
                 var newSrc = img.attr("src") === "../assets/png/off.png" ? "../assets/png/on.png" : "../assets/png/off.png";
                 img.attr("src", newSrc);
 
-                isSoundEnabled = !isSoundEnabled; // Toggle sound state
-                hoverSound.muted = !isSoundEnabled; // Mute/unmute hover sound
+                isSoundEnabled = !isSoundEnabled;
+                hoverSound.muted = !isSoundEnabled;
+
+                // Save sound state to local storage
+                localStorage.setItem("isSoundEnabled", isSoundEnabled);
             });
 
             // Play hover sound when hovering over buttons (if enabled)
-            $(".hoverSound").hover(function () {
+            $(".hoverSound").mouseenter(function () {
                 if (isSoundEnabled) {
-                    hoverSound.currentTime = 0; // Restart sound on each hover
+                    hoverSound.currentTime = 0; // Restart sound on each hover-in
                     hoverSound.play();
                 }
             });
+
 
         });
 
