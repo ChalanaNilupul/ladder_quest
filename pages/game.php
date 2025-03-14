@@ -21,7 +21,7 @@ if (!isset($_SESSION['user_id'])) {
     <script src="../js/menu.js"></script>
     <script>
 
-        let score;
+        let score = 0;
         let imgApi;
         let solution;
         let timeLeft = 15;
@@ -42,7 +42,7 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
                 <div class="div">
                     <img id="no" onclick="closeTab()" src="../assets/png/close.png" alt="">
-                    <a href="./menu.php"><img id="ok" src="../assets/png/ok.png" alt=""></a>
+                    <img onclick="leaveGame()" id="ok" src="../assets/png/ok.png" alt="">
                 </div>
             </div>
         </div>
@@ -70,6 +70,21 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
             </div>
         </div>
+        <div class="gameOver tab " id="gameOver">
+            <img id="board" src="../assets/svg/htpBoard.svg" alt="">
+            <div class="goBackIn tabIn">
+                <div class="div result">
+                    <h1 style="color:rgb(0, 179, 0)">You won!</h1>
+                </div>
+                <div class="div">
+                    <h3>Score : <span id="gameScore"></span></h3>
+                </div>
+
+                <div class="div">
+                    <img onclick="directHomeOver()" class="monkeyloading" src="../assets/png/prew.png" alt="">
+                </div>
+            </div>
+        </div>
 
 
     </div>
@@ -89,8 +104,18 @@ if (!isset($_SESSION['user_id'])) {
             <div class="rightIn">
                 <div class="playersout">
                     <div class="players">
-                        <div id="you"><img id="p1" src="" alt=""><h2 >You</h2></div>
-                        <div id="oppent"><img id="p2" src="" alt=""><h2 >Player1</h2></div>
+                        <div id="you">
+                            <div class="pIn">
+                                <img class="table" src="../assets/png/table.png" alt=""><img id="p1" src="" alt="">
+                                <h2>You</h2>
+                            </div>
+                        </div>
+                        <div id="oppent">
+                            <div class="pIn">
+                                <img class="table" src="../assets/png/table.png" alt=""><img id="p2" src="" alt="">
+                                <h2 id="oppentUsername"></h2>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="questionout">
@@ -100,23 +125,23 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
                 <div class="answersOut">
                     <div class="answers">
-                        <button class='ansBtn'>0</button>
-                        <button class='ansBtn'>1</button>
-                        <button class='ansBtn'>2</button>
-                        <button class='ansBtn'>3</button>
-                        <button class='ansBtn'>4</button>
-                        <button class='ansBtn'>5</button>
-                        <button class='ansBtn'>6</button>
-                        <button class='ansBtn'>7</button>
-                        <button class='ansBtn'>8</button>
-                        <button class='ansBtn'>9</button>
+                        <button class='ansBtn' value="0"><img src="../assets/png/0.png" alt=""></button>
+                        <button class='ansBtn' value="1"><img id="one" src="../assets/png/1.png" alt=""></button>
+                        <button class='ansBtn' value="2"><img src="../assets/png/2.png" alt=""></button>
+                        <button class='ansBtn' value="3"><img src="../assets/png/3.png" alt=""></button>
+                        <button class='ansBtn' value="4"><img src="../assets/png/4.png" alt=""></button>
+                        <button class='ansBtn' value="5"><img src="../assets/png/5.png" alt=""></button>
+                        <button class='ansBtn' value="6"><img src="../assets/png/6.png" alt=""></button>
+                        <button class='ansBtn' value="7"><img src="../assets/png/7.png" alt=""></button>
+                        <button class='ansBtn' value="8"><img src="../assets/png/8.png" alt=""></button>
+                        <button class='ansBtn' value="9"><img src="../assets/png/9.png" alt=""></button>
                     </div>
                 </div>
                 <div class="menuItemsOut">
                     <div class="menuItems">
                         <div class="time" style="display:none">
                             <img class="clock" src="../assets/png/clock.png" alt="">
-                            <p><span id="timer">29</span> Sec</p>
+                            <p><span id="timer"></span> Sec</p>
                         </div>
 
 
@@ -136,6 +161,40 @@ if (!isset($_SESSION['user_id'])) {
         let gameId = localStorage.getItem("gameId");
 
 
+
+        function directHomeOver() {
+            localStorage.setItem("tempScore", 0);
+            window.location.href = 'menu.php';
+        }
+
+        function leaveGame() {
+            localStorage.setItem("tempScore", 0);
+            window.location.href = 'menu.php';
+        }
+
+
+        function fetchPlayerNames(player1Id, player2Id) {
+            $.ajax({
+                url: "../server/get_player_name.php",
+                method: "GET",
+                data: { player1_id: player1Id, player2_id: player2Id },
+                success: function (response) {
+                    let data = JSON.parse(response);
+
+                    if (myId == localStorage.getItem("player1")) {
+                        $("#oppentUsername").text(data[player2Id]);
+                    }
+                    else {
+                        $("#oppentUsername").text(data[player1Id]);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching player names:", xhr.responseText);
+                }
+            });
+        }
+
+
         $(document).ready(function () {
 
             //assigning player character----------------------------------------------------------
@@ -143,16 +202,46 @@ if (!isset($_SESSION['user_id'])) {
             // console.log(myId == player1)
             // console.log(localStorage.getItem("player1"))
             // console.log(myId)
-            if(myId == localStorage.getItem("player1")){
-                $('#p1').attr('src','../assets/monkey.png')
-                $('#p2').attr('src','../assets/monkey2.png')
-                $('#p2').css('width','30px')
+            if (myId == localStorage.getItem("player1")) {
+                $('#p1').attr('src', '../assets/monkey.png')
+                $('#p2').attr('src', '../assets/monkey2.png')
+                $('#p2').css('width', '30px')
             }
-            else{
-                $('#p1').attr('src','../assets/monkey2.png')
-                $('#p2').attr('src','../assets/monkey.png')
-                $('#p1').css('width','30px')
+            else {
+                $('#p1').attr('src', '../assets/monkey2.png')
+                $('#p2').attr('src', '../assets/monkey.png')
+                $('#p1').css('width', '30px')
             }
+
+
+
+            //checking player 2 joined----------------------------------------------------------------------------
+
+            let checkGameInterval = setInterval(function () {
+                $.ajax({
+                    url: "../server/check_players_joined.php",
+                    method: "POST",
+                    data: { gameId: localStorage.getItem("gameId") },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.started) {
+
+                            startGame();
+                            clearInterval(checkGameInterval);
+
+
+                            closeTab();
+
+
+                            console.log("Game started!");
+                        } else {
+
+                            openTab('waiting')
+                            console.log("Waiting for Player 2...");
+                        }
+                    }
+                });
+            }, 1000);
 
 
             //start game----------------------------------------------------------------------------
@@ -165,7 +254,7 @@ if (!isset($_SESSION['user_id'])) {
                     dataType: "json",
                     success: function (response) {
                         if (response.started) {
-                            clearInterval(checkGameInterval); // Stop checking
+                            clearInterval(checkGameInterval); 
 
                             console.log("Game started!");
                             player1 = response.player1_id;
@@ -173,14 +262,18 @@ if (!isset($_SESSION['user_id'])) {
                             localStorage.setItem("player1", response.player1_id);
                             localStorage.setItem("player2", response.player2_id);
 
+
+                            //fetch oppent username------------------------------------
+                            fetchPlayerNames(localStorage.getItem("player1"), localStorage.getItem("player2"));
+
                             //startTime();
                             //updateCountdown(gameId);
 
                             if (myId == response.player1_id) {
-                                $('#you').css('color', 'green');
+                                $('#you').css('color', 'rgb(0, 255, 64)');
                             }
                             else {
-                                $('#enemy').css('color', 'green');
+                                $('#enemy').css('color', 'rgb(0, 255, 64)');
                             }
 
 
@@ -274,8 +367,8 @@ if (!isset($_SESSION['user_id'])) {
                                 //$(document).on("keydown", handleKeyPress);
 
 
-                                $('#you').css('color', 'green');
-                                $('#enemy').css('color', '#AA6028');
+                                $('#you').css('color', 'rgb(0, 255, 64)');
+                                $('#oppent').css('color', 'white');
                             } else {
                                 //console.log("Waiting for opponent's turn...");
                                 $(".ansBtn").prop("disabled", true);
@@ -284,8 +377,8 @@ if (!isset($_SESSION['user_id'])) {
                                 // $(document).off("keydown", handleKeyPress);
 
 
-                                $('#enemy').css('color', 'green');
-                                $('#you').css('color', '#AA6028');
+                                $('#oppent').css('color', 'rgb(0, 255, 64)');
+                                $('#you').css('color', 'white');
                             }
 
                         } else {
@@ -304,35 +397,65 @@ if (!isset($_SESSION['user_id'])) {
 
 
             //check player positions-------------------------------------------------------------------
-                function fetchPlayerPositions() {
-                    if (isMoving) return; // Do nothing if a move is in progress
+            function fetchPlayerPositions() {
+                if (isMoving) return; 
 
-                    let gameId = localStorage.getItem("gameId");
+                let gameId = localStorage.getItem("gameId");
+                let totalCells = 100;
 
-                    $.ajax({
-                        url: "../server/get_positions.php",
-                        method: "GET",
-                        data: { gameId: gameId },
-                        success: function (response) {
-                            let data = JSON.parse(response);
+                $.ajax({
+                    url: "../server/get_positions.php",
+                    method: "GET",
+                    data: { gameId: gameId },
+                    success: function (response) {
+                        let data = JSON.parse(response);
 
-                            if (data.player1_pos !== undefined && data.player2_pos !== undefined) {
-                                if (!isMoving && player1Position !== data.player1_pos) {
-                                    player1Position = data.player1_pos;
-                                    updatePlayerPosition(localStorage.getItem("player1"));
-                                }
+                        if (data.player1_pos !== undefined && data.player2_pos !== undefined) {
+                            if (!isMoving && player1Position !== data.player1_pos) {
+                                player1Position = data.player1_pos;
+                                updatePlayerPosition(localStorage.getItem("player1"));
 
-                                if (!isMoving && player2Position !== data.player2_pos) {
-                                    player2Position = data.player2_pos;
-                                    updatePlayerPosition(localStorage.getItem("player2"));
+                                //game over------------------------------------------------
+                                if (player1Position == totalCells) {
+                                    if (myId == localStorage.getItem("player1")) {
+                                        openTab('gameOver')
+                                        $('#gameScore').text(localStorage.getItem("tempScore"))
+                                        $('.result').html("<h1 style='color:rgb(0, 179, 0)'>You won!</h1>")
+                                    }
+                                    else {
+                                        openTab('gameOver')
+                                        $('#gameScore').text(localStorage.getItem("tempScore"))
+                                        $('.result').html("<h1 style='color:red'>You lost!</h1>")
+                                    }
                                 }
                             }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error("Error fetching player positions:", xhr.responseText);
+
+                            if (!isMoving && player2Position !== data.player2_pos) {
+                                player2Position = data.player2_pos;
+                                updatePlayerPosition(localStorage.getItem("player2"));
+
+                                //game over--------------------------------------------------
+                                if (player2Position == totalCells) {
+                                    if (myId == localStorage.getItem("player2")) {
+                                        console.log(player2Position)
+                                        openTab('gameOver')
+                                        $('#gameScore').text(localStorage.getItem("tempScore"))
+                                        $('.result').html("<h1 style='color:rgb(0, 179, 0)'>You won!</h1>")
+                                    }
+                                    else {
+                                        openTab('gameOver')
+                                        $('#gameScore').text(localStorage.getItem("tempScore"))
+                                        $('.result').html("<h1 style='color:red'>You lost!</h1>")
+                                    }
+                                }
+                            }
                         }
-                    });
-                }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching player positions:", xhr.responseText);
+                    }
+                });
+            }
 
             // Call this function every 500ms to keep positions updated
             setInterval(fetchPlayerPositions, 500);
@@ -341,34 +464,6 @@ if (!isset($_SESSION['user_id'])) {
 
 
 
-
-            //checking player 2 joined----------------------------------------------------------------------------
-
-            let checkGameInterval = setInterval(function () {
-                $.ajax({
-                    url: "../server/check_game_status.php",
-                    method: "POST",
-                    data: { gameId: localStorage.getItem("gameId") },
-                    dataType: "json",
-                    success: function (response) {
-                        if (response.started) {
-
-                            startGame();
-                            clearInterval(checkGameInterval);
-
-
-                            $('.tabs').css('display', 'none');
-                            $('.waiting').removeClass('active');
-
-                            console.log("Game started!");
-                        } else {
-                            $('.tabs').css('display', 'flex');
-                            $('.waiting').addClass('active');
-                            console.log("Waiting for Player 2...");
-                        }
-                    }
-                });
-            }, 1000);
 
 
 
@@ -398,14 +493,18 @@ if (!isset($_SESSION['user_id'])) {
 
             // Score update-----------------------------------------------------------
 
+            let tempScore = 0;
+
             function highScore(score) {
                 var dataSet = {
                     score: score,
                     userId: "<?php echo $_SESSION['user_id']; ?>"
                 };
 
+                tempScore += score;
+                localStorage.setItem("tempScore", tempScore);
 
-                //console.log(dataSet)
+                //console.log( localStorage.getItem("tempScore"))
 
                 $.ajax({
 
@@ -430,79 +529,101 @@ if (!isset($_SESSION['user_id'])) {
 
             //Time Countdown-----------------------------------------------------------
 
-            function updateCountdown() {
+            // function updateCountdown() {
+            //     clearInterval(timerInterval);
+
+            //     timerInterval = setInterval(() => {
+            //         $.ajax({
+            //             url: `../server/get_timer.php?game_id=${localStorage.getItem("gameCountId")}`,
+            //             type: "GET",
+            //             dataType: 'json',
+            //             success: function (response) {
+            //                 if (response && response.time_left !== undefined) {
+            //                     timeLeft = response['time_left'];
+            //                     $("#timer").text(timeLeft);
+
+            //                     if (timeLeft <= 10) {
+            //                         $('.clock').addClass('active');
+            //                         document.getElementById("clock").play();
+            //                     }
+
+            //                     if (timeLeft <= 1) {
+            //                         // No need to manually reset here; the server handles it
+            //                         $('.clock').removeClass('active');
+            //                         document.getElementById("wrong").play();
+            //                         document.getElementById("clock").pause();
+
+            //                         switchTurns();
+            //                         // updateCountdown(); // Not needed; the interval continues
+            //                     }
+            //                 } else {
+            //                     console.error('Invalid response structure.');
+            //                 }
+            //             },
+            //             error: function (xhr, status, error) {
+            //                 console.error('Error fetching countdown data:', error);
+            //                 if (xhr.responseText) {
+            //                     console.log('Server response:', xhr.responseText);
+            //                 } else {
+            //                     console.log('No server response received.');
+            //                 }
+            //             }
+            //         });
+            //     }, 1000);
+            // }
+
+
+
+
+
+            // async function startTime() {
+
+            //     const response = await fetch("../server/start_time.php", {
+            //         method: "POST",
+            //         headers: { "Content-Type": "application/json" }
+            //     });
+
+            //     const data = await response.json();
+
+            //     if (data.success) {
+            //         localStorage.setItem("gameCountId", data.game_id); // Save game ID
+            //         localStorage.setItem("startTime", data.start_time); // Save start time
+
+
+            //         //console.log('time created')
+            //         //console.log(localStorage.getItem("gameCountId"))
+
+            //     } else {
+            //         console.error("Failed to start game:", data.error);
+            //     }
+            // }
+
+
+
+            //Time Countdown-----------------------------------------------------------------
+
+            function countDown() {
                 clearInterval(timerInterval);
-
+                
                 timerInterval = setInterval(() => {
-                    $.ajax({
-                        url: `../server/get_timer.php?game_id=${localStorage.getItem("gameCountId")}`,
-                        type: "GET",
-                        dataType: 'json',
-                        success: function (response) {
-                            if (response && response.time_left !== undefined) {
-                                timeLeft = response['time_left'];
-                                $("#timer").text(timeLeft);
+                    $("#timer").text(timeLeft);
 
-                                if (timeLeft <= 10) {
-                                    $('.clock').addClass('active');
-                                    document.getElementById("clock").play();
-                                }
+                    if (timeLeft <= 10) {
+                        $('.clock').addClass('active');
+                        document.getElementById("clock").play();
+                    }
 
-                                if (timeLeft <= 1) {
-                                    // No need to manually reset here; the server handles it
-                                    $('.clock').removeClass('active');
-                                    document.getElementById("wrong").play();
-                                    document.getElementById("clock").pause();
+                    timeLeft -= 1;
 
-                                    switchTurns();
-                                    // updateCountdown(); // Not needed; the interval continues
-                                }
-                            } else {
-                                console.error('Invalid response structure.');
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error fetching countdown data:', error);
-                            if (xhr.responseText) {
-                                console.log('Server response:', xhr.responseText);
-                            } else {
-                                console.log('No server response received.');
-                            }
-                        }
-                    });
+                    if (timeLeft < 0) {
+                        $('.clock').removeClass('active');
+                        document.getElementById("wrong").play();
+                        document.getElementById("clock").pause();
+
+                    }
+
                 }, 1000);
             }
-
-
-
-
-
-            async function startTime() {
-
-                const response = await fetch("../server/start_time.php", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" }
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    localStorage.setItem("gameCountId", data.game_id); // Save game ID
-                    localStorage.setItem("startTime", data.start_time); // Save start time
-
-
-                    //console.log('time created')
-                    //console.log(localStorage.getItem("gameCountId"))
-
-                } else {
-                    console.error("Failed to start game:", data.error);
-                }
-            }
-
-
-
-
-
 
 
 
@@ -532,19 +653,19 @@ if (!isset($_SESSION['user_id'])) {
             function correctAns(ans) {
                 ans.css('background-color', 'rgb(25, 255, 121)')
                 setTimeout(() => {
-                    ans.css('background-color', 'aliceblue')
+                    ans.css('background-color', '#AA6028')
                 }, 500);
             }
             //setting red to wrong answer
             function wrongAns(ans) {
                 ans.css('background-color', 'rgb(255, 43, 43)')
                 setTimeout(() => {
-                    ans.css('background-color', 'aliceblue')
+                    ans.css('background-color', '#AA6028')
                 }, 500);
             }
 
             $(".ansBtn").click(function (e) {
-                var userAns = $(this).text();
+                var userAns = $(this).val();
                 if (userAns == solution) {
 
                     answer = true;
@@ -558,8 +679,9 @@ if (!isset($_SESSION['user_id'])) {
 
                     movePlayer(userAns, answer, playerTurn)
 
-                    score += 10;
+                    score = 10;
                     highScore(score)
+
                     fetchImage();
                     updateUI();
 

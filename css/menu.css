@@ -17,6 +17,96 @@ body {
     overflow: hidden;
 }
 
+.allcontent {
+    display: none;
+}
+
+.loading {
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #6CCCD4;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading .anim {
+    width: 40%;
+}
+
+.loading .anim .loadBar {
+    position: relative;
+    overflow: visible;
+}
+
+.loading .anim .loadBar img {
+    width: 100%;
+    height: 20px;
+    position: absolute;
+    top: 0;
+
+}
+
+.loading .anim .loadBar img:nth-child(2) {
+    transition: .5s;
+    height: 14px;
+    top: 4px;
+    left: 3px;
+    width: 2%;
+
+}
+
+.loadBar div {
+    width: 0%;
+    position: relative;
+    left: 3px;
+    transition: .5s;
+    top: 4px;
+    transition: .5s;
+    height: auto;
+}
+
+.loadBar div #monkey {
+    position: absolute;
+    right: -10px;
+    width: 45px;
+    height: 60px;
+    top: -70px;
+    animation: mLoad 2s ease infinite;
+}
+
+@keyframes mLoad {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+#loadingText{
+    width: 100px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,150%);
+}
+
+
+
+
+
+
+
 
 
 
@@ -349,6 +439,11 @@ body {
     border-radius: 15px;
 }
 
+.how-to-play .imp {
+    color: rgba(255, 0, 0, 0.904);
+}
+
+
 /*--------------------------------------- high score -----------------------------------------------*/
 
 .table {
@@ -366,10 +461,10 @@ body {
 
 table {
     width: 100%;
-   
+
 }
-table th{
-}
+
+table th {}
 
 table td {
     text-align: center;
@@ -426,9 +521,21 @@ table td {
     margin-top: 0px;
 }
 
-.logoutIn #no{
+.logoutIn img:hover {
+    transform: scale(1.1);
+}
+
+
+.logoutIn #no {
+    width: 55px;
+    margin-top: 5px;
     transform: rotateZ(45deg);
 }
+
+.logoutIn #no:hover {
+    transform: scale(1.1) rotateZ(45deg);
+}
+
 
 .logoutTab #board {
     width: 80%;
@@ -438,7 +545,7 @@ table td {
 
 /*--------------------------------------- Start Game -----------------------------------------------*/
 
-.startGame .tabIn button{
+.startGame .tabIn button {
     padding: 10px 20px;
     border: 0px;
     border-radius: 25px;
@@ -447,10 +554,12 @@ table td {
     color: white;
     transition: .5s;
 }
-.startGame .tabIn button:hover{
+
+.startGame .tabIn button:hover {
     background-color: #e7c500;
 }
-.startGame #board{
+
+.startGame #board {
     width: 70%;
 }
 
@@ -462,12 +571,13 @@ table td {
     cursor: pointer;
     transform: rotateZ(45deg);
 }
-.startGame .tabIn div{
+
+.startGame .tabIn div {
     display: flex;
     justify-content: center;
 }
 
-.startGame .tabIn input{
+.startGame .tabIn input {
     border-radius: 25px;
     outline: none;
     padding: 10px;

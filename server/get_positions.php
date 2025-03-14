@@ -1,5 +1,5 @@
 <?php
-include "db_connect.php"; // Make sure you have a database connection file
+include "./DB_Connect.php"; 
 
 $gameId = $_GET['gameId'];
 
