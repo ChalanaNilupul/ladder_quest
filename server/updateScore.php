@@ -12,9 +12,10 @@ $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 $currScore = $row['score'];
 
+$total = $currScore + $score;
 
 $sql1 = "UPDATE `players`
-    SET `score` = '$score'
+    SET `score` = '$total'
     WHERE `id`='" . $userId . "'";
 
 if (mysqli_query($conn, $sql1)) {

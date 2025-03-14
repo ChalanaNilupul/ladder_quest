@@ -118,7 +118,8 @@ body {
     grid-template-rows: repeat(10, 1fr);
 }
 
-#player1,#player2 {
+#player1,
+#player2 {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -132,12 +133,13 @@ body {
     justify-content: center;
     align-items: center;
 }
-#player1{
+
+#player1 {
     /* background: rgb(0, 255, 64); */
 
 }
 
-#player1 img{
+#player1 img {
     width: 100%;
     animation: p1 1s infinite;
 }
@@ -146,9 +148,11 @@ body {
     0% {
         transform: translateY(0px);
     }
+
     50% {
         transform: translateY(-5px);
     }
+
     100% {
         transform: translateY(0px);
     }
@@ -159,7 +163,7 @@ body {
     /* background-color: red; */
 }
 
-#player2 img{
+#player2 img {
     width: 70%;
     animation: p2 1s infinite;
 }
@@ -168,9 +172,11 @@ body {
     0% {
         transform: translateY(0px);
     }
+
     50% {
         transform: translateY(-5px);
     }
+
     100% {
         transform: translateY(0px);
     }
@@ -217,7 +223,7 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: aliceblue;
+    background-color: #AA6028;
     color: #AA6028;
     cursor: pointer;
     border: 0px;
@@ -227,11 +233,27 @@ body {
     transform: scale(1.2);
 }
 
-.ansBtn.disable{
+.ansBtn.disable {
     opacity: 0.5;
 }
-.ansBtn.disable:hover{
+
+.ansBtn.disable:hover {
     transform: scale(1);
+}
+
+.ansBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.ansBtn img {
+    width: 50%;
+}
+
+#one {
+    width: 25%;
 }
 
 .menuItemsOut {
@@ -374,11 +396,23 @@ body {
 .goBackIn img {
     width: 60px;
     margin-top: 0px;
+    cursor: pointer;
+}
+
+.goBackIn img:hover {
+    transform: scale(1.1);
 }
 
 .goBackIn #no {
     transform: rotateZ(45deg);
+    width: 55px;
+    margin-top: 5px;
 }
+
+.goBackIn #no:hover {
+    transform: scale(1.1) rotateZ(45deg);
+}
+
 
 .goBack #board {
     width: 80%;
@@ -410,28 +444,51 @@ body {
     display: flex;
     justify-content: space-between;
     color: #AA6028;
+
 }
-.players div{
+
+.players div {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 40%;
+
+    padding: 5px 0px;
 }
-.players img{
+
+.players img {
     width: 40px;
     margin-right: 10px;
 }
 
+.players .table {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+    height: 100%;
+}
+.players .pIn{
+    width: 100%;
+    position: relative;
+}
+
+#you,#oppent{
+    display: flex;
+    justify-content: center;
+}
+
 /* --------------------------------------------waiting for player---------------------------------------------------- */
 
-.waiting h2{
+.waiting h2 {
     font-size: 30px;
 }
 
-.waiting #board{
+.waiting #board {
     width: 70%;
 }
 
-.waiting .monkeyloading{
+.waiting .monkeyloading {
     transform: rotate(-0deg);
     animation: m 1s ease-in-out infinite;
 }
@@ -440,12 +497,35 @@ body {
     0% {
         transform: translateY(0px);
     }
+
     50% {
         transform: translateY(20px);
     }
+
     100% {
         transform: translateY(0px);
     }
+}
+
+/* -------------------------------------------game over---------------------------------------------------- */
+
+.gameOver #board{
+    width: 85%;
+}
+.gameOver .goBackIn div{
+   display: flex;
+   justify-content: center;
+  
+}
+.gameOver .goBackIn div h1{
+    color: rgb(0, 179, 0);
+    margin-bottom: -30px;
+}
+.gameOver .goBackIn div h3 span{
+    color: rgb(255, 145, 0);
+}
+.gameOver .goBackIn div img:hover{
+    transform: scale(1.1);
 }
 
 

@@ -16,24 +16,31 @@ function movePlayer(steps, answer, PlayerTurn) {
     let targetPosition;
     if (answer) {
         targetPosition = PlayerTurn == localStorage.getItem("player1") ? player1Position + steps : player2Position + steps;
+        if(targetPosition > totalCells){
+            targetPosition = PlayerTurn == localStorage.getItem("player1") ? player1Position : player2Position ;
+            alert("You have to have the exact number ;)");
+        }
+        
     } else {
         // When answer is false, just move back one cell
         targetPosition = PlayerTurn == localStorage.getItem("player1") ? player1Position - 1 : player2Position - 1;
-        if (targetPosition < 1) targetPosition = 1; // Ensure doesn't go below 1
+        if (targetPosition < 1) targetPosition = 1; 
     }
+    
 
     function animateStep() {
         if (PlayerTurn == localStorage.getItem("player1")) {
             if (answer) {
                 if (player1Position == targetPosition) {
                     checkSnakesOrLadders(PlayerTurn);
-                    isMoving = false;  // Resume fetching after move
+                    isMoving = false;  
                     return;
                 }
                 player1Position++;
             } else {
                 if (player1Position == targetPosition) {
-                    isMoving = false;  // Resume fetching after move
+                    checkOnlySnakes(PlayerTurn);
+                    isMoving = false;  
                     return;
                 }
                 player1Position--;
@@ -42,13 +49,14 @@ function movePlayer(steps, answer, PlayerTurn) {
             if (answer) {
                 if (player2Position == targetPosition) {
                     checkSnakesOrLadders(PlayerTurn);
-                    isMoving = false;  // Resume fetching after move
+                    isMoving = false;  
                     return;
                 }
                 player2Position++;
             } else {
                 if (player2Position == targetPosition) {
-                    isMoving = false;  // Resume fetching after move
+                    checkOnlySnakes(PlayerTurn);
+                    isMoving = false;  
                     return;
                 }
                 player2Position--;
@@ -61,6 +69,29 @@ function movePlayer(steps, answer, PlayerTurn) {
 
     animateStep();
 }
+
+function checkOnlySnakes(PlayerTurn) {
+    let playerPosition = PlayerTurn == localStorage.getItem("player1") ? player1Position : player2Position;
+
+    // Check if the position is in boardConfig AND if it's a snake (new position is lower)
+    if (boardConfig[playerPosition] && playerPosition > boardConfig[playerPosition]) {
+        let newPos = boardConfig[playerPosition]; // Snake's tail position
+
+        console.log(`You hit a Snake 🐍! Moving from ${playerPosition} to ${newPos}`);
+
+        if (PlayerTurn == localStorage.getItem("player1")) {
+            player1Position = newPos;
+        } else {
+            player2Position = newPos;
+        }
+
+        updatePlayerPosition(PlayerTurn);
+
+        // Recursive call in case the new position is another snake
+        checkOnlySnakes(PlayerTurn);
+    }
+}
+
 
 
 function checkSnakesOrLadders(PlayerTurn) {
@@ -96,9 +127,9 @@ function updatePlayerPosition(PlayerTurn) {
 
     let playerElement = PlayerTurn == localStorage.getItem("player1") ? "#player1" : "#player2";
 
-    console.log('player',playerElement)
-    console.log('PlayerTurn',PlayerTurn)
-    console.log('localStorage.getItem("player1")',localStorage.getItem("player1"))
+    // console.log('player',playerElement)
+    // console.log('PlayerTurn',PlayerTurn)
+    // console.log('localStorage.getItem("player1")',localStorage.getItem("player1"))
 
     $(playerElement).css({
         "grid-row": 11 - row,
