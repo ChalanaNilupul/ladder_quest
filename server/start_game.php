@@ -2,7 +2,7 @@
 session_start();
 include "DB_Connect.php";
 
-$user_id = $_SESSION["user_id"]; // Ensure user is authenticated
+$user_id = $_SESSION["user_id"]; 
 
 $roomId = rand(10000, 99999);
 
