@@ -24,7 +24,7 @@ if (!$game) {
 
 // Check if Player 2 has joined
 if (!empty($game["player2_id"])) {
-    // Insert into gamestate table if not already inserted
+    
     $checkGameState = $conn->prepare("SELECT * FROM game_state WHERE game_id = ?");
     $checkGameState->bind_param("i", $gameId);
     $checkGameState->execute();

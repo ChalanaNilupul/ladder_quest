@@ -8,7 +8,7 @@ if (!isset($_POST['gameId']) || !isset($_POST['playerKey']) || !isset($_POST['po
 }
 
 $gameId = intval($_POST['gameId']);
-$playerKey = $_POST['playerKey']; // "player1_pos" or "player2_pos"
+$playerKey = $_POST['playerKey']; 
 $position = intval($_POST['position']);
 
 $sql = "UPDATE game_state SET $playerKey = ? WHERE game_id = ?";

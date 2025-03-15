@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_result($id, $hashed_password);
         $stmt->fetch();
 
-        // Verify the password
+       
         if (password_verify($password, $hashed_password)) {
             $_SESSION['user_id'] = $id;
             echo json_encode(["success" => true, "player_id" => $_SESSION['user_id'], "ass" => "shit"]);

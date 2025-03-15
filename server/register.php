@@ -29,10 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $stmt->close();
 
-    // Hash the password
+    
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert user into database
+    
     $stmt = $conn->prepare("INSERT INTO players (username, email, password, score) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("ssss", $name, $email, $hashed_password, $score);
     if ($stmt->execute()) {

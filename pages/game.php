@@ -254,7 +254,7 @@ if (!isset($_SESSION['user_id'])) {
                     dataType: "json",
                     success: function (response) {
                         if (response.started) {
-                            clearInterval(checkGameInterval); 
+                            clearInterval(checkGameInterval);
 
                             console.log("Game started!");
                             player1 = response.player1_id;
@@ -266,11 +266,12 @@ if (!isset($_SESSION['user_id'])) {
                             //fetch oppent username------------------------------------
                             fetchPlayerNames(localStorage.getItem("player1"), localStorage.getItem("player2"));
 
-                            //startTime();
-                            //updateCountdown(gameId);
+
+
 
                             if (myId == response.player1_id) {
                                 $('#you').css('color', 'rgb(0, 255, 64)');
+                                // countDown();
                             }
                             else {
                                 $('#enemy').css('color', 'rgb(0, 255, 64)');
@@ -308,6 +309,7 @@ if (!isset($_SESSION['user_id'])) {
 
                             } else {
                                 updateTurn(player1);
+
                             }
 
                         } else {
@@ -346,6 +348,8 @@ if (!isset($_SESSION['user_id'])) {
 
             //check turn every .5s and update ui
 
+            let countdownRunning = false;
+
             function checkTurn() {
                 $.ajax({
                     url: "../server/check_turn.php",
@@ -369,6 +373,12 @@ if (!isset($_SESSION['user_id'])) {
 
                                 $('#you').css('color', 'rgb(0, 255, 64)');
                                 $('#oppent').css('color', 'white');
+
+                                if (!countdownRunning) {
+                                    countdownRunning = true;
+                                    //countDown();
+                                }
+
                             } else {
                                 //console.log("Waiting for opponent's turn...");
                                 $(".ansBtn").prop("disabled", true);
@@ -398,7 +408,7 @@ if (!isset($_SESSION['user_id'])) {
 
             //check player positions-------------------------------------------------------------------
             function fetchPlayerPositions() {
-                if (isMoving) return; 
+                if (isMoving) return;
 
                 let gameId = localStorage.getItem("gameId");
                 let totalCells = 100;
@@ -469,26 +479,10 @@ if (!isset($_SESSION['user_id'])) {
 
 
             function updateUI() {
-                // document.getElementById("question-number").textContent = numQuestions;
-                //document.getElementById("score").textContent = score;
                 document.getElementById("timer").textContent = timeLeft;
-                // document.getElementById("level").textContent = currentLevel;
             }
 
-            // getting keyboard inputs-----------------------------------------------------------
 
-            function handleKeyPress(event) {
-                let key = event.key; // Get the pressed key
-
-                // Check if key is between "0" and "9"
-                if (key >= "0" && key <= "9") {
-                    $(".ansBtn").each(function () {
-                        if ($(this).text() === key) {
-                            $(this).click(); // Simulate button click
-                        }
-                    });
-                }
-            }
 
 
             // Score update-----------------------------------------------------------
@@ -527,84 +521,16 @@ if (!isset($_SESSION['user_id'])) {
 
 
 
-            //Time Countdown-----------------------------------------------------------
-
-            // function updateCountdown() {
-            //     clearInterval(timerInterval);
-
-            //     timerInterval = setInterval(() => {
-            //         $.ajax({
-            //             url: `../server/get_timer.php?game_id=${localStorage.getItem("gameCountId")}`,
-            //             type: "GET",
-            //             dataType: 'json',
-            //             success: function (response) {
-            //                 if (response && response.time_left !== undefined) {
-            //                     timeLeft = response['time_left'];
-            //                     $("#timer").text(timeLeft);
-
-            //                     if (timeLeft <= 10) {
-            //                         $('.clock').addClass('active');
-            //                         document.getElementById("clock").play();
-            //                     }
-
-            //                     if (timeLeft <= 1) {
-            //                         // No need to manually reset here; the server handles it
-            //                         $('.clock').removeClass('active');
-            //                         document.getElementById("wrong").play();
-            //                         document.getElementById("clock").pause();
-
-            //                         switchTurns();
-            //                         // updateCountdown(); // Not needed; the interval continues
-            //                     }
-            //                 } else {
-            //                     console.error('Invalid response structure.');
-            //                 }
-            //             },
-            //             error: function (xhr, status, error) {
-            //                 console.error('Error fetching countdown data:', error);
-            //                 if (xhr.responseText) {
-            //                     console.log('Server response:', xhr.responseText);
-            //                 } else {
-            //                     console.log('No server response received.');
-            //                 }
-            //             }
-            //         });
-            //     }, 1000);
-            // }
-
-
-
-
-
-            // async function startTime() {
-
-            //     const response = await fetch("../server/start_time.php", {
-            //         method: "POST",
-            //         headers: { "Content-Type": "application/json" }
-            //     });
-
-            //     const data = await response.json();
-
-            //     if (data.success) {
-            //         localStorage.setItem("gameCountId", data.game_id); // Save game ID
-            //         localStorage.setItem("startTime", data.start_time); // Save start time
-
-
-            //         //console.log('time created')
-            //         //console.log(localStorage.getItem("gameCountId"))
-
-            //     } else {
-            //         console.error("Failed to start game:", data.error);
-            //     }
-            // }
-
 
 
             //Time Countdown-----------------------------------------------------------------
 
             function countDown() {
                 clearInterval(timerInterval);
-                
+
+                let timeLeft = 15;
+                $("#timer").text(timeLeft);
+
                 timerInterval = setInterval(() => {
                     $("#timer").text(timeLeft);
 
@@ -613,17 +539,41 @@ if (!isset($_SESSION['user_id'])) {
                         document.getElementById("clock").play();
                     }
 
-                    timeLeft -= 1;
-
                     if (timeLeft < 0) {
+                        clearInterval(timerInterval);
                         $('.clock').removeClass('active');
                         document.getElementById("wrong").play();
                         document.getElementById("clock").pause();
+                        $("#timer").text(0);
 
+                        setTimeout(() => {
+                            document.getElementById("wrong").pause();
+                        }, 1000);
+
+
+                        answer = false;
+
+                        //choosing the player--------------------------------------------
+                        let playerTurn = myId;
+                        var userAns = 0;
+
+                        movePlayer(userAns, answer, playerTurn)
+
+                        fetchImage();
+                        updateUI();
+
+                        switchTurns();
+
+
+                        countdownRunning = false;
+
+                    } else {
+                        timeLeft -= 1;
                     }
 
                 }, 1000);
             }
+
 
 
 
@@ -685,13 +635,12 @@ if (!isset($_SESSION['user_id'])) {
                     fetchImage();
                     updateUI();
 
-                    timeLeft = 15;
-                    //countDown();
 
                     switchTurns();
 
-                    $('.clock').removeClass('active');
-                    document.getElementById("clock").pause();
+                    // clearInterval(timerInterval);
+                    // countdownRunning = false;
+                    // $('.clock').removeClass('active');
                 }
                 else {
                     answer = false;
@@ -706,8 +655,7 @@ if (!isset($_SESSION['user_id'])) {
 
                     switchTurns();
 
-                    timeLeft = 15;
-                    //countDown();
+
                     $('.clock').removeClass('active');
                     document.getElementById("clock").pause();
 
@@ -716,6 +664,11 @@ if (!isset($_SESSION['user_id'])) {
                     var audioElement = document.getElementById("wrong");
                     audioElement.currentTime = 0;
                     audioElement.play();
+
+
+                    // clearInterval(timerInterval);
+                    // countdownRunning = false;
+                    // $('.clock').removeClass('active');
                 }
             })
 
