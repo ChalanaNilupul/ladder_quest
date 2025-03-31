@@ -78,8 +78,9 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
                 <div class="div">
                     <h3>Score : <span id="gameScore"></span></h3>
-                </div>
 
+                </div>
+                <p id="congratsMessage"></p>
                 <div class="div">
                     <img onclick="directHomeOver()" class="monkeyloading" src="../assets/png/prew.png" alt="">
                 </div>
@@ -430,11 +431,13 @@ if (!isset($_SESSION['user_id'])) {
                                     if (myId == localStorage.getItem("player1")) {
                                         openTab('gameOver')
                                         $('#gameScore').text(localStorage.getItem("tempScore"))
+                                        fetchCongratsMsg();
                                         $('.result').html("<h1 style='color:rgb(0, 179, 0)'>You won!</h1>")
                                     }
                                     else {
                                         openTab('gameOver')
                                         $('#gameScore').text(localStorage.getItem("tempScore"))
+                                        fetchCongratsMsg();
                                         $('.result').html("<h1 style='color:red'>You lost!</h1>")
                                     }
                                 }
@@ -594,6 +597,45 @@ if (!isset($_SESSION['user_id'])) {
                         console.error('Error fetching image from the API:', error);
                     });
             }
+
+            // fetch Congrats Message -----------------------------------------------------------
+
+            function fetchCongratsMsg() {
+                const maxLength = 50; 
+                const maxAttempts = 5; 
+
+                function fetchQuote(attempt = 0) {
+                    fetch('https://randominspirationalquotes.onrender.com')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.quote.length <= maxLength || attempt >= maxAttempts) {
+                                showCongratsUI(data.quote);
+                            } else {
+                                fetchQuote(attempt + 1);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching quote:', error);
+                            if (attempt < maxAttempts) {
+                                fetchQuote(attempt + 1);
+                            }
+                        });
+                }
+
+                fetchQuote();
+            }
+
+
+
+
+            function showCongratsUI(message) {
+                document.getElementById("congratsMessage").innerText = message;
+            }
+
+            function closeCongrats() {
+                document.getElementById("congratsModal").style.display = "none";
+            }
+
 
 
 
