@@ -754,7 +754,7 @@ if (!isset($_SESSION['user_id'])) {
                     progress += 5;
                     updateProgress(progress);
                 }
-            }, 500); // Update every 500ms
+            }, 500); 
 
 
 
@@ -801,14 +801,6 @@ if (!isset($_SESSION['user_id'])) {
                     }
                 });
             });
-
-
-
-
-
-
-
-
 
 
             var music = $("#Music")[0];        // Background Music

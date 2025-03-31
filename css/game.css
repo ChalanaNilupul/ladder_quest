@@ -517,6 +517,11 @@ body {
    justify-content: center;
   
 }
+.gameOver p{
+    text-align: center;
+    font-size: 20px;
+    padding: 0px 5%;
+}
 .gameOver .goBackIn div h1{
     color: rgb(0, 179, 0);
     margin-bottom: -30px;
