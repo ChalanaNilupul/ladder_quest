@@ -452,11 +452,13 @@ if (!isset($_SESSION['user_id'])) {
                                     if (myId == localStorage.getItem("player2")) {
                                         console.log(player2Position)
                                         openTab('gameOver')
+                                        fetchCongratsMsg()
                                         $('#gameScore').text(localStorage.getItem("tempScore"))
                                         $('.result').html("<h1 style='color:rgb(0, 179, 0)'>You won!</h1>")
                                     }
                                     else {
                                         openTab('gameOver')
+                                        fetchCongratsMsg()
                                         $('#gameScore').text(localStorage.getItem("tempScore"))
                                         $('.result').html("<h1 style='color:red'>You lost!</h1>")
                                     }
@@ -576,10 +578,6 @@ if (!isset($_SESSION['user_id'])) {
 
             function showCongratsUI(message) {
                 document.getElementById("congratsMessage").innerText = message;
-            }
-
-            function closeCongrats() {
-                document.getElementById("congratsModal").style.display = "none";
             }
 
 
