@@ -169,10 +169,16 @@
                 $("#error").text("Invalid email format!").css("color", "red");
                 return;
             }
-
-            if (password !== confirmPassword) {
+            if (password.length >= 8) {
+                if (password !== confirmPassword) {
+                    monkeyIn()
+                    $("#error").text("Passwords do not match!").css("color", "red");
+                    return;
+                }
+            }
+            else{
                 monkeyIn()
-                $("#error").text("Passwords do not match!").css("color", "red");
+                $("#error").text("Password Must Be 8 Or More Characters Long").css("color", "red");
                 return;
             }
 
