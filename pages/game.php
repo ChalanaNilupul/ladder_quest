@@ -208,7 +208,7 @@ if (!isset($_SESSION['user_id'])) {
                 $('#p2').attr('src', '../assets/monkey2.png')
                 $('#p2').css('width', '30px')
             }
-            else {
+            if (myId == localStorage.getItem("player2")) {
                 $('#p1').attr('src', '../assets/monkey2.png')
                 $('#p2').attr('src', '../assets/monkey.png')
                 $('#p1').css('width', '30px')
@@ -522,60 +522,6 @@ if (!isset($_SESSION['user_id'])) {
                 });
             }
 
-
-
-
-
-            //Time Countdown-----------------------------------------------------------------
-
-            function countDown() {
-                clearInterval(timerInterval);
-
-                let timeLeft = 15;
-                $("#timer").text(timeLeft);
-
-                timerInterval = setInterval(() => {
-                    $("#timer").text(timeLeft);
-
-                    if (timeLeft <= 10) {
-                        $('.clock').addClass('active');
-                        document.getElementById("clock").play();
-                    }
-
-                    if (timeLeft < 0) {
-                        clearInterval(timerInterval);
-                        $('.clock').removeClass('active');
-                        document.getElementById("wrong").play();
-                        document.getElementById("clock").pause();
-                        $("#timer").text(0);
-
-                        setTimeout(() => {
-                            document.getElementById("wrong").pause();
-                        }, 1000);
-
-
-                        answer = false;
-
-                        //choosing the player--------------------------------------------
-                        let playerTurn = myId;
-                        var userAns = 0;
-
-                        movePlayer(userAns, answer, playerTurn)
-
-                        fetchImage();
-                        updateUI();
-
-                        switchTurns();
-
-
-                        countdownRunning = false;
-
-                    } else {
-                        timeLeft -= 1;
-                    }
-
-                }, 1000);
-            }
 
 
 
